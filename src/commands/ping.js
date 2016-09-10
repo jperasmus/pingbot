@@ -14,7 +14,8 @@ const msgDefaults = {
 const handler = (payload, res) => {
   const host = payload.text || '';
   
-  tcpp.ping({ address: host, port: 80, attempts: 5, timeout: 2000 }, (err, data) => {
+  
+  tcpp.ping({ address: host, port: 80, attempts: 1, timeout: 1000 }, (err, data) => {
     if (err) {
       res.set('content-type', 'application/json');
       return res.status(200).json({
@@ -35,8 +36,8 @@ const handler = (payload, res) => {
   
     const msg = _.defaults({
       channel: payload.channel_name,
+      title: 'Testing 123',
       attachments: {
-        title: 'Testing 123',
         title_link: 'https://jperasmus.me',
         text: 'text goes here',
         markdwn_in: ['text', 'pretext']
