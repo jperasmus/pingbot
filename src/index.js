@@ -26,6 +26,8 @@ app.get('/', (req, res) => { res.send('\n 👋 🌍 \n') })
 
 app.post('/commands/pingbot', (req, res) => {
   let payload = req.body
+  console.log('commands', commands);
+  console.log('payload', payload);
 
   if (!payload || payload.token !== config('PINGBOT_COMMAND_TOKEN')) {
     let err = '✋  Ping—what? An invalid slash token was provided\n' +

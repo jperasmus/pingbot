@@ -38,4 +38,4 @@ const handler = (payload, res) => {
     })
 }
 
-module.exports = { pattern: /repos/ig, handler: handler }
+module.exports = { pattern: /ping/ig, handler: handler }
