@@ -26,7 +26,29 @@ app.get('/', (req, res) => {
   fs.readFile(path.resolve(__dirname, '..', 'README.md'), (err, data) => {
     if (err) throw err;
     // TODO: Add styling to content
-    const content = marked(data.toString());
+    const readme = marked(data.toString());
+    const content = `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Building Morgage Loans">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>iBuild Home Loans</title>
+    <link rel="stylesheet" href="https://sindresorhus.com/github-markdown-css/github-markdown.css">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+    </style>
+  </head>
+  <body>
+    <main class="markdown-body">${readme}</main>
+  </body>
+</html>`;
     res.send(content);
   });
 });
