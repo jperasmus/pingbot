@@ -14,7 +14,6 @@ const msgDefaults = {
 const handler = (payload, res) => {
   const host = payload.text || '';
   
-  
   tcpp.ping({ address: host, port: 80, attempts: 1, timeout: 1000 }, (err, data) => {
     if (err) {
       res.set('content-type', 'application/json');
@@ -48,6 +47,19 @@ const handler = (payload, res) => {
     res.status(200).json(msg);
     return;
   });
+  
+  const msg = _.defaults({
+    channel: payload.channel_name,
+    title: 'Testing 123',
+    attachments: {
+      title_link: 'https://jperasmus.me',
+      text: 'text goes here',
+      markdwn_in: ['text', 'pretext']
+    }
+  }, msgDefaults);
+  
+  res.set('content-type', 'application/json');
+  res.status(200).json(msg);
 };
 
 module.exports = { pattern: /ping/ig, handler: handler };
