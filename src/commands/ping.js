@@ -11,21 +11,24 @@ const msgDefaults = {
 }
 
 const handler = (payload, res) => {
-  const host = payload.text || 'google.com'
+  const host = payload.text || ''
   
-  ping.promise.probe(host)
+  ping.promise.probe(host, {
+    timeout: 2,
+    extra: ["-i 2"],
+    min_reply: 3
+  })
     .then((res) => {
-      console.log(res)
-      var attachments = {
-        title: `${res.alive} - ${res.host} [${res.time}] `,
+      const attachments = {
+        title: `${res.host} [in ${res.time}ms] - ${res.alive ? 'It\'s alive!' : 'It\'s dead, Jim'}`,
         title_link: res.host,
         text: `${res.output}`,
         mrkdwn_in: ['text', 'pretext']
       }
   
-      let msg = _.defaults({
+      const msg = _.defaults({
         channel: payload.channel_name,
-        attachments: attachments
+        attachments
       }, msgDefaults)
   
       res.set('content-type', 'application/json')
@@ -34,7 +37,11 @@ const handler = (payload, res) => {
     })
     .catch((err) => {
       res.set('content-type', 'application/json')
-      res.status(500).json({ msg: 'Poop, something went wrong with the `ping`.'})
+      res.status(500).json({
+        msg: ':poop:, something went wrong with the `ping`.',
+        error: err
+      })
+      return
     })
 }
 
