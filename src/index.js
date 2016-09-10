@@ -1,6 +1,9 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
+const marked = require('marked');
 const proxy = require('express-http-proxy');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
@@ -19,7 +22,14 @@ if (config('PROXY_URI')) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => { res.send('\n 👋Pingbot 🌍 \n') });
+app.get('/', (req, res) => {
+  fs.readFile(path.resolve(__dirname, '..', 'README.md'), (err, data) => {
+    if (err) throw err;
+    // TODO: Add styling to content
+    const content = marked(data.toString());
+    res.send(content);
+  });
+});
 
 app.post('/commands/pingbot', (req, res) => {
   let payload = req.body;
