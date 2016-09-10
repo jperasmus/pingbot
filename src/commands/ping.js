@@ -47,11 +47,11 @@ const handler = (payload, res) => {
           number = ':six:';
           break;
       }
-      return current += `${number} => ${next.err ? next.err : ''}${next.time ? next.time + ' ms' : ''}\n`
+      return current += `${number} - ${next.err ? next.err : ''}${next.time ? next.time + ' ms' : ''}\n`
     }, '');
-    const text = `*Attempts:* ${data.attempts}\n*Avg time:* ${data.avg} ms\n*Max time:* ${data.max} ms\n*Min time:* ${data.min} ms\n*Details:* ${deets}`;
+    const text = `*Avg time:* ${data.avg} ms | *Max time:* ${data.max} ms | *Min time:* ${data.min} ms\n${deets}`;
     const attachments = [{
-      title: `Host :computer: "${data.address}"`,
+      title: `PING ${data.address} :computer: [${data.attempts} attempts]`,
       title_link: data.address,
       text,
       mrkdwn_in: ['text', 'pretext']
