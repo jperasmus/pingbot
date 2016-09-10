@@ -35,7 +35,12 @@ const handler = (payload, res) => {
   
     const msg = _.defaults({
       channel: payload.channel_name,
-      attachments
+      attachments: {
+        title: 'Title',
+        title_link: 'some-link',
+        text: 'text goes here',
+        markdwn_in: ['text', 'pretext']
+      }
     }, msgDefaults);
   
     res.set('content-type', 'application/json');
