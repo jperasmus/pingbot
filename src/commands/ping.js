@@ -51,11 +51,11 @@ const handler = (payload, res) => {
   const msg = _.defaults({
     channel: payload.channel_name,
     title: 'Pinging ' + host,
-    attachments: {
+    attachments: [{
       title_link: 'https://jperasmus.me',
       text: 'text goes here',
       markdwn_in: ['text', 'pretext']
-    }
+    }]
   }, msgDefaults);
   
   res.set('content-type', 'application/json');
