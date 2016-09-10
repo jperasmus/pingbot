@@ -25,7 +25,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   fs.readFile(path.resolve(__dirname, '..', 'README.md'), (err, data) => {
     if (err) throw err;
-    // TODO: Add styling to content
     const readme = marked(data.toString());
     const content = `<!DOCTYPE html>
   <html lang="en">
