@@ -14,7 +14,7 @@ const msgDefaults = {
 const handler = (payload, res) => {
   const host = payload.text || '';
   
-  tcpp.ping({ address: host, port: 80, attempts: 1, timeout: 1000 }, (err, data) => {
+  tcpp.ping({ address: host, port: 80, attempts: 5, timeout: 2000 }, (err, data) => {
     if (err) {
       res.set('content-type', 'application/json');
       return res.status(200).json({
@@ -23,11 +23,35 @@ const handler = (payload, res) => {
       });
     }
     const deets = _.reduce(data.results, (current, next) => {
-      return current += `${next.seq} => ${next.err ? next.err : ''}${next.time ? next.time + ' ms' : ''}\n`
+      let number = '';
+      switch (next.seq) {
+        case 0:
+          number = ':zero:';
+          break;
+        case 1:
+          number = ':one:';
+          break;
+        case 2:
+          number = ':two:';
+          break;
+        case 3:
+          number = ':three:';
+          break;
+        case 4:
+          number = ':four:';
+          break;
+        case 5:
+          number = ':five:';
+          break;
+        case 6:
+          number = ':six:';
+          break;
+      }
+      return current += `${number} => ${next.err ? next.err : ''}${next.time ? next.time + ' ms' : ''}\n`
     }, '');
-    const text = `Attempts: ${data.attempts}\nAvg time: ${data.avg} ms\nMax time: ${data.max} ms\nMin time: ${data.min} ms\nDeets: ${deets}`;
+    const text = `*Attempts:* ${data.attempts}\n*Avg time:* ${data.avg} ms\n*Max time:* ${data.max} ms\n*Min time:* ${data.min} ms\n*Details:* ${deets}`;
     const attachments = [{
-      title: `Host: ${data.address}`,
+      title: `Host :computer: "${data.address}"`,
       title_link: data.address,
       text,
       mrkdwn_in: ['text', 'pretext']
@@ -43,19 +67,6 @@ const handler = (payload, res) => {
     res.status(200).json(msg);
     return;
   });
-  
-  // const msg = _.defaults({
-  //   channel: payload.channel_name,
-  //   attachments: [{
-  //     title: 'Pinging ' + host,
-  //     title_link: 'https://jperasmus.me',
-  //     text: 'text goes here',
-  //     markdwn_in: ['text', 'pretext']
-  //   }]
-  // }, msgDefaults);
-  //
-  // res.set('content-type', 'application/json');
-  // res.status(200).json(msg);
 };
 
 module.exports = { pattern: /ping/ig, handler: handler };
