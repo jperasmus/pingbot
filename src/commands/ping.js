@@ -7,7 +7,7 @@ const tcpp = require('tcp-ping');
 
 const msgDefaults = {
   response_type: 'in_channel',
-  username: 'Piiing',
+  username: 'piiing',
   icon_emoji: config('ICON_EMOJI')
 };
 
