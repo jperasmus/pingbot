@@ -1,17 +1,12 @@
-# 🌟 Pingbot
+# :robot_face: Pingbot
 
-![Pingbot](https://heroku-www-files.s3.amazonaws.com/pingbot/pingbot-banner.png)
-
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
-
-Pingbot is [GitHub's trending open-source](https://github.com/trending/) page, reincarnated as a Slack bot. It is also the sample referenced in the ["How to Deploy Your Slack Bots to Heroku"](https://blog.heroku.com/archives/2016/3/9/how-to-deploy-your-slack-bots-to-heroku) blog post.
+Pingbot is greatly inspired by the ["How to Deploy Your Slack Bots to Heroku"](https://blog.heroku.com/archives/2016/3/9/how-to-deploy-your-slack-bots-to-heroku) blog post.
 
 
 ### Supported `/slash` commands
 
-Create a `/pingbot` [custom slash command](https://api.slack.com/slash-commands), using the URL: `{app-name}.herokuapp.com/commands/pingbot`. *Take note of the provided `token`, this is used to verify requests come from Slack.*
+Create a `/ping` [custom slash command](https://api.slack.com/slash-commands), using the URL: `{app-name}.herokuapp.com/commands/pingbot`. *Take note of the provided `token`, this is used to verify requests come from Slack.*
 
-- `/ping` or `/ping help` - List available commands
 - `/ping google.com` - Ping `google.com`
 
 ### Install
@@ -70,4 +65,3 @@ $ heroku open
 ### License
 
 **[This project is licensed under the terms of the MIT license.](http://license-me.herokuapp.com)**
- -- [_Need your own? There's a button for that :wink:_](https://github.com/mattcreager/license)
