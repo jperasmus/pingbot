@@ -3,6 +3,7 @@
 const _ = require('lodash')
 const config = require('../config')
 const ping = require('ping')
+const tcpp = require('tcp-ping')
 
 const msgDefaults = {
   response_type: 'in_channel',
@@ -13,36 +14,40 @@ const msgDefaults = {
 const handler = (payload, res) => {
   const host = payload.text || ''
   
-  ping.promise.probe(host, {
-    timeout: 2,
-    extra: ["-i 2"],
-    min_reply: 3
-  })
-    .then((res) => {
-      const attachments = {
-        title: `${res.host} [in ${res.time}ms] - ${res.alive ? 'It\'s alive!' : 'It\'s dead, Jim'}`,
-        title_link: res.host,
-        text: `${res.output}`,
-        mrkdwn_in: ['text', 'pretext']
-      }
-  
-      const msg = _.defaults({
-        channel: payload.channel_name,
-        attachments
-      }, msgDefaults)
-  
+  tcpp.ping({ address: host, port: 80, attempts: 5, timeout: 5000 }, (err, data) => {
+    if (err) {
       res.set('content-type', 'application/json')
-      res.status(200).json(msg)
-      return
-    })
-    .catch((err) => {
-      res.set('content-type', 'application/json')
-      res.status(500).json({
-        msg: ':poop:, something went wrong with the `ping`.',
+      return res.status(200).json({
+        msg: ':poop:, something went wrong while pinging `' + host + '`',
         error: err
       })
-      return
-    })
+    }
+    const deets = _.reduce(data.results, (current, next) => {
+      return current += `${next.seq} => ${next.err ? next.err : ''}${next.time ? next.time + ' ms' : ''}
+`
+    }, '')
+    const text = `*Attempts:* ${data.attempts}
+*Avg time:* ${data.avg} ms
+*Max time:* ${data.max} ms
+*Min time:* ${data.min} ms
+*Deets:* ${deets}
+`
+    
+    const attachments = {
+      title: `${data.address}`, // - ${res.alive ? 'It\'s alive!' : 'It\'s dead, Jim'}`,
+      title_link: data.address,
+      text,
+      mrkdwn_in: ['text', 'pretext']
+    }
+  
+    const msg = _.defaults({
+      channel: payload.channel_name,
+      attachments
+    }, msgDefaults)
+  
+    res.set('content-type', 'application/json')
+    return res.status(200).json(msg)
+  });
 }
 
 module.exports = { pattern: /ping/ig, handler: handler }
