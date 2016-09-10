@@ -36,15 +36,16 @@ const handler = (payload, res) => {
     const msg = _.defaults({
       channel: payload.channel_name,
       attachments: {
-        title: 'Title',
-        title_link: 'some-link',
+        title: 'Testing 123',
+        title_link: 'https://jperasmus.me',
         text: 'text goes here',
         markdwn_in: ['text', 'pretext']
       }
     }, msgDefaults);
   
     res.set('content-type', 'application/json');
-    return res.status(200).json(msg);
+    res.status(200).json(msg);
+    return;
   });
 };
 
